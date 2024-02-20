@@ -66,4 +66,18 @@ public class ReservationServiceImpl implements ReservationService {
     public List<Guest> getAllGuests() {
         return guestRepository.findAll();
     }
+
+    @Override
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
+
+    @Override
+    public void addGuest(Guest guest) {
+        if (guest == null){
+            throw new RuntimeException("Guest can not be null");
+        }
+
+        guestRepository.save(guest);
+    }
 }
