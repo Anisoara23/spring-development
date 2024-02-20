@@ -14,9 +14,13 @@ public class DateUtils {
 
         Date date;
 
-        try {
-            date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
+        if (dateString != null) {
+            try {
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+                date = new Date();
+            }
+        } else {
             date = new Date();
         }
 

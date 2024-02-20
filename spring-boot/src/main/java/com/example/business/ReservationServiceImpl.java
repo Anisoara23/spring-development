@@ -61,4 +61,9 @@ public class ReservationServiceImpl implements ReservationService {
         });
         return roomReservations;
     }
+
+    @Override
+    public List<Guest> getAllGuests() {
+        return guestRepository.findAll();
+    }
 }
