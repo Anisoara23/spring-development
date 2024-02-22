@@ -1,7 +1,5 @@
 package com.example;
 
-import com.example.domain.Difficulty;
-import com.example.domain.Region;
 import com.example.servie.TourPackageService;
 import com.example.servie.TourService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -9,6 +7,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,9 +15,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class MicroserviceSpringApplication implements CommandLineRunner {
+
+    @Value("${app.importedFile}")
+    private String importedFile;
 
     @Autowired
     private TourService tourService;
@@ -39,7 +43,7 @@ public class MicroserviceSpringApplication implements CommandLineRunner {
         createTourPackages();
         long numOfPackages = tourPackageService.total();
 
-        createTours("microservice/src/main/resources/ExploreCalifornia.json");
+        createTours(importedFile);
         long numOfTours = tourService.total();
     }
 
@@ -56,68 +60,49 @@ public class MicroserviceSpringApplication implements CommandLineRunner {
     }
 
     private void createTours(String fileToImport) throws IOException {
-        TourFromFile.read(fileToImport).forEach(importedTour ->
-                tourService.createTour(importedTour.getTitle(),
-                        importedTour.getDescription(),
-                        importedTour.getBlurb(),
-                        importedTour.getPrice(),
-                        importedTour.getLength(),
-                        importedTour.getBullets(),
-                        importedTour.getKeywords(),
-                        importedTour.getPackageType(),
-                        importedTour.getDifficulty(),
-                        importedTour.getRegion()));
+        TourFromFile.read(fileToImport).forEach(tourFromFile ->
+                tourService.createTour(tourFromFile.getTitle(),
+                        tourFromFile.getPackageName(),
+                        tourFromFile.getDetails()));
     }
 
     private static class TourFromFile {
 
-        private String packageType, title, description, blurb, price, length,
-                bullets, keywords, difficulty, region;
+        private String title;
+        private String packageName;
+        private Map<String, String> details;
 
-        public static List<TourFromFile> read(String fileToImport) throws IOException {
-            return new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-                    .readValue(new FileInputStream(fileToImport), new TypeReference<>() {
-                    });
+        TourFromFile(Map<String, String> record) {
+            this.title = record.get("title");
+            this.packageName = record.get("packageType");
+            this.details = record;
+            this.details.remove("packageType");
+            this.details.remove("title");
         }
 
-        public String getPackageType() {
-            return packageType;
+        static List<TourFromFile> read(String fileToImport) throws IOException {
+            List<Map<String, String>> records = new ObjectMapper()
+                    .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                    .readValue(new FileInputStream(fileToImport),
+                            new TypeReference<>() {
+                            });
+
+            return records.stream()
+                    .map(TourFromFile::new)
+                    .collect(Collectors.toList());
         }
 
         public String getTitle() {
             return title;
         }
 
-        public String getDescription() {
-            return description;
+        public String getPackageName() {
+            return packageName;
         }
 
-        public String getBlurb() {
-            return blurb;
-        }
-
-        public Integer getPrice() {
-            return Integer.parseInt(price);
-        }
-
-        public String getLength() {
-            return length;
-        }
-
-        public String getBullets() {
-            return bullets;
-        }
-
-        public String getKeywords() {
-            return keywords;
-        }
-
-        public Difficulty getDifficulty() {
-            return Difficulty.valueOf(difficulty);
-        }
-
-        public Region getRegion() {
-            return Region.findByLabel(region);
+        public Map<String, String> getDetails() {
+            return details;
         }
     }
+
 }
