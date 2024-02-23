@@ -5,6 +5,8 @@ import com.example.domain.TourRating;
 import com.example.repo.TourRatingRepository;
 import com.example.repo.TourRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.util.OptionalDouble;
 @Service
 @Transactional
 public class TourRatingService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TourRatingService.class);
     private final TourRatingRepository tourRatingRepository;
     private final TourRepository tourRepository;
 
@@ -42,6 +46,7 @@ public class TourRatingService {
      * @throws NoSuchElementException if no Tour found.
      */
     public void createNew(int tourId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
+        LOGGER.info("Create Rating for tour {} of customers {}", tourId, customerId);
         tourRatingRepository.save(new TourRating(verifyTour(tourId), customerId,
                 score, comment));
     }
@@ -62,6 +67,7 @@ public class TourRatingService {
      * @return List of TourRatings
      */
     public List<TourRating> lookupAll() {
+        LOGGER.info("Lookup all Ratings");
         return tourRatingRepository.findAll();
     }
 
@@ -74,6 +80,7 @@ public class TourRatingService {
      * @throws NoSuchElementException if no Tour found.
      */
     public Page<TourRating> lookupRatings(int tourId, Pageable pageable) throws NoSuchElementException {
+        LOGGER.info("Lookup Rating for tour {}", tourId);
         return tourRatingRepository.findByTourId(verifyTour(tourId).getId(), pageable);
     }
 
@@ -87,6 +94,7 @@ public class TourRatingService {
      * @throws NoSuchElementException if no Tour found.
      */
     public TourRating update(int tourId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
+        LOGGER.info("Update all of Rating for tour {} of customers {}", tourId, customerId);
         TourRating rating = verifyTourRating(tourId, customerId);
         rating.setScore(score);
         rating.setComment(comment);
@@ -105,6 +113,7 @@ public class TourRatingService {
      */
     public TourRating updateSome(int tourId, Integer customerId, Integer score, String comment)
             throws NoSuchElementException {
+        LOGGER.info("Update some of Rating for tour {} of customers {}", tourId, customerId);
         TourRating rating = verifyTourRating(tourId, customerId);
         if (score != null) {
             rating.setScore(score);
@@ -123,6 +132,7 @@ public class TourRatingService {
      * @throws NoSuchElementException if no Tour found.
      */
     public void delete(int tourId, Integer customerId) throws NoSuchElementException {
+        LOGGER.info("Delete Rating for tour {} and customer {}", tourId, customerId);
         TourRating rating = verifyTourRating(tourId, customerId);
         tourRatingRepository.delete(rating);
     }
@@ -135,6 +145,7 @@ public class TourRatingService {
      * @throws NoSuchElementException
      */
     public Double getAverageScore(int tourId) throws NoSuchElementException {
+        LOGGER.info("Get average score of tour {} by customers {}", tourId);
         List<TourRating> ratings = tourRatingRepository.findByTourId(verifyTour(tourId).getId());
         OptionalDouble average = ratings.stream().mapToInt(TourRating::getScore).average();
         return average.isPresent() ? average.getAsDouble() : null;
@@ -148,8 +159,10 @@ public class TourRatingService {
      * @param customers
      */
     public void rateMany(int tourId, int score, Integer[] customers) {
+        LOGGER.info("Rate tour {} by customers {}", tourId, List.of(customers));
         tourRepository.findById(tourId).ifPresent(tour -> {
             for (Integer c : customers) {
+                LOGGER.debug("Attempt to create Tour Rating for customer {}", c);
                 tourRatingRepository.save(new TourRating(tour, c, score));
             }
         });
