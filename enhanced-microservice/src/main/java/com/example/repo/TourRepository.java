@@ -1,6 +1,7 @@
 package com.example.repo;
 
 import com.example.domain.Tour;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
 
+@Tag(name = "Tour", description = "The Tour API")
 public interface TourRepository extends JpaRepository<Tour, Integer> {
 
     /**

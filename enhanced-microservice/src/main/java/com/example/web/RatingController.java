@@ -2,6 +2,10 @@ package com.example.web;
 
 
 import com.example.service.TourRatingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
@@ -17,6 +21,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(path = "/ratings")
+@Tag(name = "Rating", description = "The Rating API")
 public class RatingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RatingController.class);
@@ -31,6 +36,10 @@ public class RatingController {
     }
 
     @GetMapping
+    @Operation(summary = "Find all ratings")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
     public CollectionModel<RatingDto> getAll() {
         LOGGER.info("GET /ratings");
         return assembler.toCollectionModel(tourRatingService.lookupAll());
