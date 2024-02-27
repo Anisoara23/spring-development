@@ -132,4 +132,15 @@ public class TourRating {
     public int hashCode() {
         return Objects.hash(id, tour, customerId, score, comment);
     }
+
+    @Override
+    public String toString() {
+        return "TourRating{" +
+                "id=" + id +
+                ", tour=" + tour +
+                ", customerId=" + customerId +
+                ", score=" + score +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }
