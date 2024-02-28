@@ -23,7 +23,7 @@ public interface TourRatingRepository extends JpaRepository<TourRating, Integer>
     /**
      * Lookup a page of TourRatings for a tour.
      *
-     * @param tourId tourId is the tour Identifier
+     * @param tourId   tourId is the tour Identifier
      * @param pageable details for the desired page
      * @return a Page of any found TourRatings
      */
@@ -31,6 +31,7 @@ public interface TourRatingRepository extends JpaRepository<TourRating, Integer>
 
     /**
      * Lookup a TourRating by the TourId and Customer Id
+     *
      * @param tourId
      * @param customerId
      * @return TourRating if found, null otherwise.

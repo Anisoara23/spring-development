@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Table(name="tour_package")
+@Table(name = "tour_package")
 @Entity
 public class TourPackage implements Serializable {
     @Id

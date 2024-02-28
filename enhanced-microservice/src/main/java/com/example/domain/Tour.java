@@ -42,7 +42,7 @@ public class Tour implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name="tour_package_code")
+    @JoinColumn(name = "tour_package_code")
     private TourPackage tourPackage;
 
     @Column

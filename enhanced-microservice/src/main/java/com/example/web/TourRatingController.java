@@ -31,7 +31,7 @@ import java.util.NoSuchElementException;
 @RequestMapping(path = "/tours/{tourId}/ratings")
 public class TourRatingController {
 
-    private static final Logger LOGGER =LoggerFactory.getLogger(TourRatingController .class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TourRatingController.class);
     private final TourRatingService tourRatingService;
     private final RatingAssembler assembler;
 
