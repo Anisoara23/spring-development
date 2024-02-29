@@ -33,7 +33,7 @@ public class JwtProvider {
 
     private JwtParser parser;
 
-    private String secretKey;
+    private final String secretKey;
     private long validityInMilliseconds;
 
     @Autowired

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,7 @@ public class TourRatingController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_CSR')")
     public void createTourRating(@PathVariable(value = "tourId") int tourId, @RequestBody @Validated RatingDto ratingDto) {
         LOGGER.info("POST /tours/{}/ratings", tourId);
         tourRatingService.createNew(tourId, ratingDto.getCustomerId(), ratingDto.getScore(), ratingDto.getComment());
@@ -62,6 +64,7 @@ public class TourRatingController {
      */
     @PostMapping("/{score}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_CSR')")
     public void createManyTourRatings(@PathVariable(value = "tourId") int tourId,
                                       @PathVariable(value = "score") int score,
                                       @RequestParam("customers") Integer customers[]) {
@@ -104,6 +107,7 @@ public class TourRatingController {
      * @return The modified Rating DTO.
      */
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_CSR')")
     public RatingDto updateWithPut(@PathVariable(value = "tourId") int tourId, @RequestBody @Validated RatingDto ratingDto) {
         LOGGER.info("PUT /tours/{}/ratings", tourId);
         return toDto(tourRatingService.update(tourId, ratingDto.getCustomerId(),
@@ -118,6 +122,7 @@ public class TourRatingController {
      * @return The modified Rating DTO.
      */
     @PatchMapping
+    @PreAuthorize("hasRole('ROLE_CSR')")
     public RatingDto updateWithPatch(@PathVariable(value = "tourId") int tourId, @RequestBody @Validated RatingDto ratingDto) {
         LOGGER.info("PATCH /tours/{}/ratings", tourId);
         return toDto(tourRatingService.updateSome(tourId, ratingDto.getCustomerId(),
@@ -131,6 +136,7 @@ public class TourRatingController {
      * @param customerId
      */
     @DeleteMapping("/{customerId}")
+    @PreAuthorize("hasRole('ROLE_CSR')")
     public void delete(@PathVariable(value = "tourId") int tourId, @PathVariable(value = "customerId") int customerId) {
         LOGGER.info("DELETE /tours/{}/ratings/{}", tourId, customerId);
         tourRatingService.delete(tourId, customerId);
@@ -144,18 +150,5 @@ public class TourRatingController {
      */
     private RatingDto toDto(TourRating tourRating) {
         return new RatingDto(tourRating.getScore(), tourRating.getComment(), tourRating.getCustomerId());
-    }
-
-    /**
-     * Exception handler if NoSuchElementException is thrown in this Controller
-     *
-     * @param ex
-     * @return Error message String.
-     */
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchElementException.class)
-    public String return400(NoSuchElementException ex) {
-        LOGGER.error("Unable to complete transaction", ex);
-        return ex.getMessage();
     }
 }
