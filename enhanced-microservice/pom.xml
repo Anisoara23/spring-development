@@ -147,6 +147,23 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>docker</id>
+            <properties>
+                <spring.profiles.active>docker</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-mysql</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
     <build>
         <plugins>
