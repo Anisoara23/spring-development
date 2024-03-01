@@ -1,11 +1,10 @@
 package com.example.web.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -60,23 +59,6 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorResponse> handleHttpServerErrorException(
             HttpServletRequest request,
             HttpServerErrorException ex
-    ) {
-        LOGGER.error(ex.getMessage());
-        ErrorResponse errorResponse = new ErrorResponse(
-                ex.getMessage(),
-                CONFLICT,
-                LocalDateTime.now(),
-                request.getServletPath()
-        );
-
-        return new ResponseEntity<>(errorResponse, CONFLICT);
-    }
-
-    @ResponseStatus(CONFLICT)
-    @ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleJdbcSQLIntegrityConstraintViolationException(
-            HttpServletRequest request,
-            JdbcSQLIntegrityConstraintViolationException ex
     ) {
         LOGGER.error(ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
