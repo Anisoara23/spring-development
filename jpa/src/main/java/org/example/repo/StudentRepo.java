@@ -2,6 +2,8 @@ package org.example.repo;
 
 import org.example.domain.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,16 +16,20 @@ public interface StudentRepo extends JpaRepository<Student, Integer> {
 
     List<Student> findByAttendeeLastName(String lastName);
 
+    @Query(value = "select * from Student s order by s.age desc limit 1", nativeQuery = true)
+    Optional<Student> findOldest();
 
-    Optional<Student> findTopByOrderByAgeDesc();
-
-    List<Student> findByAttendeeFirstNameAndAttendeeLastName(String firstName, String lastName);
+    @Query("select s from Student s join attendee a where a.firstName = :firstName and a.lastName = :lastName")
+    List<Student> findByFirstAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
 
     List<Student> findByAgeLessThan(int age);
 
-    List<Student> findByAttendeeLastNameLike(String nameCriteria);
+    @Query("select s from Student s join attendee a where a.lastName like :nameCriteria")
+    List<Student> findSimilarLastName(String nameCriteria);
 
-    Optional<Student> findFirstByOrderByAttendeeLastNameAsc();
+    @Query(value = "select * from Student s order by s.last_name asc limit 1", nativeQuery = true)
+    Optional<Student> findFirstInAlphabet();
 
-    List<Student> findTop3ByOrderByAgeDesc();
+    @Query(value = "select * from Student s order by s.age desc limit 3", nativeQuery = true)
+    List<Student> find3Oldest();
 }
