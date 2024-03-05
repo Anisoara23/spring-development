@@ -1,7 +1,8 @@
 package org.example.repo;
 
-import jakarta.persistence.TypedQuery;
 import org.example.domain.Staff;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
