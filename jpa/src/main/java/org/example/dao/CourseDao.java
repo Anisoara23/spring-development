@@ -3,10 +3,10 @@ package org.example.dao;
 import org.example.domain.Course;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,37 +16,6 @@ public class CourseDao {
 
     public CourseDao(EntityManagerFactory emf) {
         this.em = emf.createEntityManager();
-    }
-
-    public List<Course> findAll() {
-        return em.createQuery("from Course").getResultList();
-    }
-
-    public Optional<Course> findById(int id) {
-        return Optional.ofNullable(em.find(Course.class, id));
-    }
-
-    public Course save(Course course) {
-
-        em.getTransaction().begin();
-        em.persist(course);
-        em.getTransaction().commit();
-        return course;
-    }
-
-    public void delete(Course course) {
-
-        em.getTransaction().begin();
-        em.remove(course);
-        em.flush();
-        em.getTransaction().commit();
-    }
-
-
-    public void deleteAll() {
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM Course").executeUpdate();
-        em.getTransaction().commit();
     }
 
     public Optional<Course> findByName(String name) {

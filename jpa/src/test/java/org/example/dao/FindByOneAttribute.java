@@ -1,22 +1,18 @@
 package org.example.dao;
 
-import org.example.PersistenceJPAConfig;
 import org.example.business.UniversityService;
 import org.example.domain.Course;
 import org.example.domain.Staff;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { PersistenceJPAConfig.class })
+@SpringBootTest
 public class FindByOneAttribute {
 
     @Autowired
@@ -29,6 +25,7 @@ public class FindByOneAttribute {
     private CourseDao courseDao;
 
     private List<Staff> allStaff;
+
     @Test
     public void findByOneAttribute() {
         // Test Create
@@ -51,10 +48,10 @@ public class FindByOneAttribute {
                 courseDao.findByChairLastName(firstCourse.getDepartment().getChair().getMember().getLastName())
                         .get(0).getDepartment().getChair().getMember().getLastName());
 
-        Course courseWithPrerequisites = allCourses.stream().filter(x->x.getPrerequisites().size() > 0).findFirst().get();
+        Course courseWithPrerequisites = allCourses.stream().filter(x -> x.getPrerequisites().size() > 0).findFirst().get();
         Integer prerequisiteId = courseWithPrerequisites.getPrerequisites().get(0).getId();
         assertTrue(courseDao.findCourseByPrerequisite(prerequisiteId).contains(courseWithPrerequisites));
 
-        courseDao.findByCredits(3).stream().forEach(x-> assertEquals(3, x.getCredits()));
+        courseDao.findByCredits(3).stream().forEach(x -> assertEquals(3, x.getCredits()));
     }
 }

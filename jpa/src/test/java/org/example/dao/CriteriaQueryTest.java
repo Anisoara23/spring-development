@@ -1,22 +1,18 @@
 package org.example.dao;
 
-import org.example.PersistenceJPAConfig;
 import org.example.business.CourseFilter;
 import org.example.business.DynamicQueryService;
 import org.example.business.UniversityService;
 import org.example.domain.Department;
 import org.example.domain.Staff;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.example.business.CourseFilter.filterBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { PersistenceJPAConfig.class })
+@SpringBootTest
 public class CriteriaQueryTest {
 
     @Autowired

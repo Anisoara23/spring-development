@@ -1,21 +1,17 @@
 package org.example.dao;
 
-import org.example.PersistenceJPAConfig;
 import org.example.business.UniversityService;
 import org.example.domain.Student;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { PersistenceJPAConfig.class })
+@SpringBootTest
 public class FindByClausesAndExpressions {
 
     @Autowired
@@ -36,10 +32,10 @@ public class FindByClausesAndExpressions {
         assertEquals(firstStudent, studentDao.findByFirstAndLastName(firstStudent.getAttendee().getFirstName(),
                 firstStudent.getAttendee().getLastName()).get(0));
 
-        studentDao.findByAgeLessThan(20).stream().forEach(s-> assertTrue(s.getAge() < 20));
+        studentDao.findByAgeLessThan(20).stream().forEach(s -> assertTrue(s.getAge() < 20));
 
         studentDao.findSimilarLastName("%o%")
-                .stream().forEach(s->assertTrue(s.getAttendee().getLastName().contains("o")));
+                .stream().forEach(s -> assertTrue(s.getAttendee().getLastName().contains("o")));
 
         assertTrue(studentDao.findFirstInAlphabet().get().getAttendee().getLastName().equals("Doe"));
 

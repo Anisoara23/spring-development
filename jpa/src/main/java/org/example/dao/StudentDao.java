@@ -3,9 +3,9 @@ package org.example.dao;
 import org.example.domain.Student;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,29 +15,6 @@ public class StudentDao {
 
     public StudentDao(EntityManagerFactory emf) {
         this.em = emf.createEntityManager();
-    }
-    public List<Student> findAll() {
-        return em.createQuery("from Student").getResultList();
-    }
-    public Optional<Student> findById(int id){
-        return Optional.ofNullable(em.find(Student.class, id));
-    }
-
-    public Student save(Student student) {
-        em.getTransaction().begin();
-        em.persist(student);
-        em.getTransaction().commit();
-        return student;
-    }
-
-    public void delete(Student student){
-        em.remove(student);
-    }
-
-    public void deleteAll() {
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM Student").executeUpdate();
-        em.getTransaction().commit();
     }
 
     List<Student> findByFullTime(boolean fullTime){
