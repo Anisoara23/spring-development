@@ -1,5 +1,6 @@
 package org.example.business;
 
+import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.criteria.Predicate;
 import org.example.domain.Course;
 import org.example.domain.Department;
@@ -9,6 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.example.domain.QCourse.course;
+
 
 public class CourseFilter {
     private Optional<Department> department = Optional.empty();
@@ -59,5 +63,13 @@ public class CourseFilter {
 
             return criteriaBuilder.and(predicates.toArray(predicates.toArray(new Predicate[0])));
         });
+    }
+
+    public com.querydsl.core.types.Predicate getQueryDslPredicate() {
+        BooleanBuilder predicate = new BooleanBuilder();
+        department.ifPresent(dept -> predicate.and(course.department.eq(dept)));
+        credits.ifPresent(cred -> predicate.and(course.credits.eq(cred)));
+        instructor.ifPresent(instr -> predicate.and(course.instructor.eq(instr)));
+        return predicate;
     }
 }
