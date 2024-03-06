@@ -34,7 +34,6 @@ public class Course {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Course> prerequisites = new ArrayList<>();
 
-
     @ManyToOne
     private Department department;
 
