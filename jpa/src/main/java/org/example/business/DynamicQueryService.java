@@ -23,10 +23,14 @@ public class DynamicQueryService {
         return courseRepo.findAll(filter.getSpecification());
     }
 
-    public List<Course> findCoursesByQueryDsl(CourseFilter filter){
+    public List<Course> findCoursesByQueryDsl(CourseFilter filter) {
         List<Course> courses = new ArrayList<>();
-       courseQueryDslRepo.findAll(filter.getQueryDslPredicate())
+        courseQueryDslRepo.findAll(filter.getQueryDslPredicate())
                 .forEach(courses::add);
-       return courses;
+        return courses;
+    }
+
+    public List<Course> filterCoursesByExample(CourseFilter filter) {
+        return courseRepo.findAll(filter.getExampleProbe());
     }
 }

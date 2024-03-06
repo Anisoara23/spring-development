@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.example.domain.Course;
 import org.example.domain.Department;
 import org.example.domain.Staff;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -71,5 +72,14 @@ public class CourseFilter {
         credits.ifPresent(cred -> predicate.and(course.credits.eq(cred)));
         instructor.ifPresent(instr -> predicate.and(course.instructor.eq(instr)));
         return predicate;
+    }
+
+    public Example<Course> getExampleProbe() {
+        return Example.of(new Course(
+                null,
+                credits.orElse(null),
+                instructor.orElse(null),
+                department.orElse(null)
+        ));
     }
 }
