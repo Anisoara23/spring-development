@@ -1,6 +1,5 @@
 package org.example.repo;
 
-import jakarta.persistence.TypedQuery;
 import org.example.domain.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 

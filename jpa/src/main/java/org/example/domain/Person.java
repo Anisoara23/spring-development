@@ -2,6 +2,7 @@ package org.example.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 
 @Embeddable
@@ -38,7 +39,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return  " firstName='" + firstName + '\'' +
+        return " firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + "\' ";
     }
 

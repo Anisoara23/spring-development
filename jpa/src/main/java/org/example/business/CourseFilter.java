@@ -1,8 +1,13 @@
 package org.example.business;
 
+import jakarta.persistence.criteria.Predicate;
+import org.example.domain.Course;
 import org.example.domain.Department;
 import org.example.domain.Staff;
+import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CourseFilter {
@@ -10,7 +15,7 @@ public class CourseFilter {
     private Optional<Integer> credits = Optional.empty();
     private Optional<Staff> instructor = Optional.empty();
 
-    public static CourseFilter filterBy(){
+    public static CourseFilter filterBy() {
         return new CourseFilter();
     }
 
@@ -18,6 +23,7 @@ public class CourseFilter {
         this.department = Optional.of(department);
         return this;
     }
+
     public CourseFilter credits(Integer credits) {
         this.credits = Optional.of(credits);
         return this;
@@ -38,5 +44,20 @@ public class CourseFilter {
 
     public Optional<Staff> getInstructor() {
         return instructor;
+    }
+
+    public Specification<Course> getSpecification() {
+        return ((root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            department.ifPresent(d ->
+                    predicates.add(criteriaBuilder.equal(root.get("department"), d)));
+            credits.ifPresent(c ->
+                    predicates.add(criteriaBuilder.equal(root.get("credits"), c)));
+            instructor.ifPresent(i ->
+                    predicates.add(criteriaBuilder.equal(root.get("instructor"), i)));
+
+            return criteriaBuilder.and(predicates.toArray(predicates.toArray(new Predicate[0])));
+        });
     }
 }
