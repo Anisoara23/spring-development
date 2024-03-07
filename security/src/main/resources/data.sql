@@ -10,8 +10,8 @@ INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM cu
 INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM customers where name = 'Acme'), '3000 Widgets');
 INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM customers where name = 'Callahan Auto'), '200 Widgets');
 
-INSERT INTO users(username, password, enabled) values('user', 'pass', true);
-INSERT INTO users(username, password, enabled) values('admin', 'pass', true);
+INSERT INTO users(username, password, enabled) values('user', '$2a$10$9P54gl6h7eOSXaDS.fPQZurICDQYFo0/nGeCheUEoBNq3BwuT5.l.', true);
+INSERT INTO users(username, password, enabled) values('admin', '$2a$10$9P54gl6h7eOSXaDS.fPQZurICDQYFo0/nGeCheUEoBNq3BwuT5.l.', true);
 
 INSERT INTO authorities(username, authority) values('user', 'ROLE_USER');
 INSERT INTO authorities(username, authority) values('admin', 'ROLE_ADMIN');
